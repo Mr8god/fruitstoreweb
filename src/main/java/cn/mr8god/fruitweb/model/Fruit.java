@@ -18,3 +18,4 @@ public class Fruit {
     private double price;
     private String remark;
 }
+
