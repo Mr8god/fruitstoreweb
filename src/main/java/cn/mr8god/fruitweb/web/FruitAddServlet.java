@@ -31,7 +31,6 @@ public class FruitAddServlet extends HttpServlet {
     @SneakyThrows
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         Fruit fruit=new Fruit();
         BeanUtils.populate(fruit, req.getParameterMap());
 
