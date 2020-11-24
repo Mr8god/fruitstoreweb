@@ -1,6 +1,11 @@
 package cn.mr8god.fruitweb.web;
 
+import cn.mr8god.fruitweb.model.Fruit;
+import cn.mr8god.fruitweb.service.FruitService;
+import cn.mr8god.fruitweb.service.impl.FruitServiceImpl;
 import cn.mr8god.fruitweb.util.JdbcUtil;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,22 +28,11 @@ public class FruitDelServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
 
-        Connection connection = null;
-        Statement statement = null;
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+        FruitService fruitService = applicationContext.getBean("fruitService", FruitService.class);
 
-        try {
-            connection = JdbcUtil.getconnection();
-            String sql = "delete from fruitstore where id=" + id;
-            System.out.println(sql);
-            statement = connection.createStatement();
-            int ret = statement.executeUpdate(sql);
+        fruitService.delFruitById(id);
 
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } finally {
-            JdbcUtil.free(statement, connection);
-        }
         resp.sendRedirect("fruitList");
     }
 }

@@ -1,7 +1,11 @@
 package cn.mr8god.fruitweb.web;
 
 import cn.mr8god.fruitweb.model.Fruit;
+import cn.mr8god.fruitweb.service.FruitService;
+import cn.mr8god.fruitweb.service.impl.FruitServiceImpl;
 import cn.mr8god.fruitweb.util.JdbcUtil;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,39 +26,16 @@ import java.util.List;
  */
 @WebServlet("/fruitList")
 public class FruitListServlet extends HttpServlet {
+
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Statement statement = null;
-        Connection connection = null;
-        ResultSet resultSet = null;
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+        FruitService fruitService = applicationContext.getBean("fruitService", FruitService.class);
 
-        try {
-            connection = JdbcUtil.getconnection();
+        List<Fruit> fruits = fruitService.findAllFruits();
+        req.setAttribute("fruits", fruits);
+        req.getRequestDispatcher("fruitList.jsp").forward(req, resp);
 
-            String sql = "Select * from fruitstore";
-
-            statement = connection.createStatement();
-
-            resultSet = statement.executeQuery(sql);
-
-            List<Fruit> fruits;
-            fruits = new ArrayList<>();
-            while (resultSet.next()) {
-                Fruit fruit = new Fruit();
-                fruit.setId(resultSet.getInt(1));
-                fruit.setName(resultSet.getString("name"));
-                fruit.setPrice(resultSet.getDouble("price"));
-                fruit.setNum(resultSet.getInt("num"));
-                fruit.setRemark(resultSet.getString("remark"));
-                fruits.add(fruit);
-            }
-            req.setAttribute("fruits", fruits);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            JdbcUtil.free(resultSet, statement, connection);
-        }
-
-        req.getRequestDispatcher("fruitList.jsp").forward(req,resp);
     }
 }
