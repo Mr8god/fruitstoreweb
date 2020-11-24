@@ -38,7 +38,6 @@ public class FruitAddServlet extends HttpServlet {
 
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
         FruitService fruitService = applicationContext.getBean("fruitService", FruitService.class);
-
         boolean ret = fruitService.saveFruit(fruit);
         if (ret) {
             resp.sendRedirect("fruitList");

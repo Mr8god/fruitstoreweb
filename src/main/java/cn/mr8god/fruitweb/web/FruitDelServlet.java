@@ -27,7 +27,7 @@ public class FruitDelServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-
+      
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
         FruitService fruitService = applicationContext.getBean("fruitService", FruitService.class);
 

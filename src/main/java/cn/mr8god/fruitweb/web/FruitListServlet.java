@@ -26,13 +26,10 @@ import java.util.List;
  */
 @WebServlet("/fruitList")
 public class FruitListServlet extends HttpServlet {
-
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
         FruitService fruitService = applicationContext.getBean("fruitService", FruitService.class);
-
         List<Fruit> fruits = fruitService.findAllFruits();
         req.setAttribute("fruits", fruits);
         req.getRequestDispatcher("fruitList.jsp").forward(req, resp);
