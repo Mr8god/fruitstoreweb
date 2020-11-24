@@ -7,6 +7,9 @@ import cn.mr8god.fruitweb.util.JdbcUtil;
 import lombok.SneakyThrows;
 import org.apache.commons.beanutils.BeanUtils;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,7 +32,9 @@ public class FruitEditServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
 
-        FruitService fruitService = new FruitServiceImpl();
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+        FruitService fruitService = applicationContext.getBean("fruitService", FruitService.class);
+
         Fruit fruit = fruitService.findFruitById(id);
         req.setAttribute("fruit", fruit);
         req.getRequestDispatcher("fruitEdit.jsp").forward(req,resp);
@@ -41,8 +46,10 @@ public class FruitEditServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Fruit fruit=new Fruit();
         BeanUtils.populate(fruit, req.getParameterMap());
+      
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+        FruitService fruitService = applicationContext.getBean("fruitService", FruitService.class);
 
-        FruitService fruitService = new FruitServiceImpl();
         boolean ret = fruitService.updateFruit(fruit);
         if (ret) {
             resp.sendRedirect("fruitList");

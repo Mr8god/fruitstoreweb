@@ -10,6 +10,7 @@
         <module name="fruitwebingithub" />
         <module name="fruitweb" />
         <module name="fruitweboptimizationlayeredmybatis" />
+        <module name="fruitweboptimizationlayeredmybatisspring" />
         <module name="fruitweboptimization" />
         <module name="fruitweboptimizationlayered" />
       </profile>
